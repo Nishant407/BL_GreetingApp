@@ -1,7 +1,7 @@
 package com.example.GreetingApp.controller;
 
 import com.example.GreetingApp.model.Greeting;
-import com.example.GreetingApp.model.User;
+import com.example.GreetingApp.model.AuthUser;
 import com.example.GreetingApp.service.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class GreetingController {
 //        User user = new User(firstName, lastName);
 //        return service.addGreeting(user);
 //    }
-    public Greeting createGreeting(@RequestBody User user){
+    public Greeting createGreeting(@RequestBody AuthUser user){
         return service.addGreeting(user);
     }
 

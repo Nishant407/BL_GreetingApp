@@ -1,7 +1,7 @@
 package com.example.GreetingApp.service;
 
 import com.example.GreetingApp.model.Greeting;
-import com.example.GreetingApp.model.User;
+import com.example.GreetingApp.model.AuthUser;
 import com.example.GreetingApp.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class GreetingService implements IGreetingService {
     private GreetingRepository greetingRepository;
 
     @Override
-    public Greeting addGreeting(User user) {
+    public Greeting addGreeting(AuthUser user) {
         String message = String.format(template, (user.toString().isEmpty()) ? "World" : user.toString());
         return greetingRepository.save(new Greeting(counter.incrementAndGet(), message));
     }
