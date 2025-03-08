@@ -60,7 +60,42 @@ public class AuthUserService {
         // Return the token and a success message in LoginResponseDto format
         return new LoginResponseDto("Login successful!", token);
     }
+    public String forgotPassword(String email, String newPassword) {
+        Optional<AuthUser> userOptional = authUserRepository.findByEmail(email);
 
+        if (userOptional.isEmpty()) {
+            return "Sorry! We cannot find the user email: " + email;
+        }
+
+        AuthUser user = userOptional.get();
+        user.setPassword(passwordEncoder.encode(newPassword)); // Hash the new password
+        authUserRepository.save(user);
+
+        // Send confirmation email
+        String subject = "Password Reset Confirmation";
+        String message = "Hello " + user.getFirstName() + ",  Your password has been successfully updated.";
+        emailService.sendEmail(user.getEmail(), subject, message);
+
+        return "Password has been changed successfully!";
+    }
+    public String resetPassword(String email, String currentPassword, String newPassword) {
+        Optional<AuthUser> userOptional = authUserRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            return "User not found with email: " + email;
+        }
+
+        AuthUser user = userOptional.get();
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            return "Current password is incorrect!";
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        authUserRepository.save(user);
+
+        return "Password reset successfully!";
+    }
     public boolean validateToken(String token) {
         try {
             String username = jwtUtil.extractUsername(token);
